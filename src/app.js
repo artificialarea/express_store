@@ -3,6 +3,7 @@ const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const helmet = require('helmet')
+const { v4: uuid } = require('uuid')
 const { NODE_ENV } = require('./config')
 
 const app = express()
@@ -84,7 +85,7 @@ app.post('/user', (req, res) => {
 
   // at this point all validation passed
 
-  const id = req.body.id; // generate a unique id
+  const id = uuid();
   const newUser = {
     id, 
     username,
@@ -95,7 +96,7 @@ app.post('/user', (req, res) => {
 
   users.push(newUser)
   console.log(users)
-  
+
   res.send('All validation passed')
 
 })
