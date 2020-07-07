@@ -97,8 +97,31 @@ app.post('/user', (req, res) => {
   users.push(newUser)
   console.log(users)
 
-  res.send('All validation passed')
+  // res
+  //   .status(204) // 204 No Content
+  //   .end()
 
+  res
+    .status(201) // 201 Content
+    .location(`http://localhost:8000/user/${id}`)
+    // .json(newUser)
+    .json({id: id})
+})
+
+app.get('/user/:userId', (req, res) => {
+  // console.log('req.params: ', req.params.userId)
+  const userInQuestion = users.filter(user => user.id.includes(req.params.userId))
+  
+  if (!userInQuestion[0]) {
+    res
+      .status(400)
+      .send('We have no user by that id on file')
+  } else {
+    console.log('userInQuestion: ', userInQuestion)
+    res
+      .status(200)
+      .send(userInQuestion[0])
+  }
 })
 
 
