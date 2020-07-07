@@ -108,9 +108,15 @@ app.post('/user', (req, res) => {
     .json({id: id})
 })
 
+app.get('/user', (req, res) => {
+  res
+    .json(users)
+})
+
 app.get('/user/:userId', (req, res) => {
   // console.log('req.params: ', req.params.userId)
-  const userInQuestion = users.filter(user => user.id.includes(req.params.userId))
+  const userInQuestion = users.filter(user => 
+    user.id.includes(req.params.userId));
   
   if (!userInQuestion[0]) {
     res
@@ -122,6 +128,31 @@ app.get('/user/:userId', (req, res) => {
       .status(200)
       .send(userInQuestion[0])
   }
+})
+
+app.delete('/user/:userId', (req, res) => {
+  const { userId } = req.params;
+  
+  const index = users.findIndex(u => u.id === userId)
+  // ^^^^ note the findIndex() approach, which differs from my 
+  // .filter/.includes approach in app.get
+
+  if (index === -1) {
+    return res
+      .status(404)
+      .send('User not found')
+  }
+
+  users.splice(index, 1)
+
+  // res
+  //   .status(204)
+  //   .end()
+  
+  res
+    .status(201)
+    .send(`per request, deleted user id: ${userId}`)
+
 })
 
 
